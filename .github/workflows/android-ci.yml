@@ -21,6 +21,11 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
+    - name: Decode secrets.properties file
+      env:
+        THIRDPARTIES_PROPERTIES: ${{ secrets.thirdParties }}
+      run: echo "$THIRDPARTIES_PROPERTIES" | base64 -d > ./thirdParties.properties
+      
     - name: Change wrapper permissions
       run: chmod +x ./gradlew
     - name: Setup Gradle Cache
