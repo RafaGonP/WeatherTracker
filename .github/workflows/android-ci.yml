@@ -38,18 +38,18 @@ jobs:
       
     - name: Run Unit Tests
       run: ./gradlew testDebugUnitTest
-    
-    - name: Start Android Emulator
-      uses: reactivecircus/android-emulator-runner@v2
-      with:
-        api-level: 30 
-        target: google_apis
-        arch: x86_64
-        profile: Nexus 6
-        disk-size: '3000M' 
+
+    - name: Enable KVM
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
 
     - name: Run UI/Instrumentation Tests (Espresso/Compose Tests)
-      run: ./gradlew connectedCheck
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 29
+        script: ./gradlew connectedCheck
 
     - name: Assemble Debug Build
       run: ./gradlew assembleDebug
