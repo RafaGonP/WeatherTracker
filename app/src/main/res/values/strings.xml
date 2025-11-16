@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">WeatherTracker</string>
+    <string name="loading">Loading…</string>
+    <string name="error">Error</string>
+    <string name="temp">%1$d°</string>
+    <string name="temp_divider"> / </string>
+    <string name="max_temp">Max %1$d°</string>
+    <string name="min_temp">Min %1$d°</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="rain">Rain</string>
+    <string name="dawn">Dawn</string>
+    <string name="dusk">Dusk</string>
+    <string name="uv">UV</string>
 </resources>
