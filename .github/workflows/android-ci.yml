@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+name: Android CI
+
+on:
+  push:
+    branches: [ "main", "development" ]
+  pull_request:
+    branches: [ "main", "development" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Setup Gradle Cache
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        cache-read-only: ${{ github.ref != 'refs/heads/main' }} 
+
+    - name: Run Lint
+      run: ./gradlew lintDebug
+      
+    - name: Run Unit Tests
+      run: ./gradlew testDebugUnitTest
+    
+    - name: Start Android Emulator
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 30 
+        target: google_apis
+        arch: x86_64
+        profile: Nexus 6
+        disk-size: '3000M' 
+
+    - name: Run UI/Instrumentation Tests (Espresso/Compose Tests)
+      run: ./gradlew connectedCheck
+
+    - name: Assemble Debug Build
+      run: ./gradlew assembleDebug
